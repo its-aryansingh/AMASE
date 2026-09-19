@@ -25,9 +25,7 @@ def assistant(
 ) -> dict[str, Any]:
     content: list[dict[str, Any]] = [{"type": "text", "text": "working"}]
     if tool:
-        content.append(
-            {"type": "tool_use", "id": tool_id, "name": tool, "input": tool_input or {}}
-        )
+        content.append({"type": "tool_use", "id": tool_id, "name": tool, "input": tool_input or {}})
     return {
         "type": "assistant",
         "uuid": f"a{index}",

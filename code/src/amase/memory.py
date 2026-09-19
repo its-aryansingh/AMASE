@@ -267,9 +267,7 @@ class LocalBackend:
             rowid = self._conn.execute(
                 "SELECT rowid FROM events WHERE run_id = ? AND seq = ?", (run_id, seq)
             ).fetchone()[0]
-            self._conn.execute(
-                "INSERT INTO events_fts (rowid, text) VALUES (?, ?)", (rowid, text)
-            )
+            self._conn.execute("INSERT INTO events_fts (rowid, text) VALUES (?, ?)", (rowid, text))
 
     def extend(self, run_id: str, events: Iterable[Mapping[str, Any]]) -> int:
         """Append many events; return the number written."""
@@ -524,9 +522,7 @@ class OracleBackend:
 
     def load(self, run_id: str) -> Iterator[dict[str, Any]]:  # pragma: no cover
         with self._conn.cursor() as cur:
-            cur.execute(
-                f"SELECT body FROM {self.table} WHERE run_id = :r ORDER BY seq", r=run_id
-            )
+            cur.execute(f"SELECT body FROM {self.table} WHERE run_id = :r ORDER BY seq", r=run_id)
             for (body,) in cur:
                 yield json.loads(body.read() if hasattr(body, "read") else body)
 

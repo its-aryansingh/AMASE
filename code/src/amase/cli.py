@@ -55,10 +55,14 @@ def _print_summary(s: Summary, model: str) -> None:
     if s.mean_fraction is not None:
         print(f"  mean post-signal       {s.mean_fraction * 100:.1f}%")
         print(f"  median post-signal     {s.median_fraction * 100:.1f}%")  # type: ignore[operator]
-    print(f"  tokens after signal    {_fmt_tokens(s.post_signal_tokens)}"
-          f" of {_fmt_tokens(s.total_tokens)}")
-    print(f"  money after signal     ${s.post_signal_usd:.4f}"
-          f"  (₹{inr(s.post_signal_usd):.2f})  priced as {model}")
+    print(
+        f"  tokens after signal    {_fmt_tokens(s.post_signal_tokens)}"
+        f" of {_fmt_tokens(s.total_tokens)}"
+    )
+    print(
+        f"  money after signal     ${s.post_signal_usd:.4f}"
+        f"  (₹{inr(s.post_signal_usd):.2f})  priced as {model}"
+    )
     print("─" * 64)
     if s.mean_fraction is not None:
         print(
@@ -101,16 +105,18 @@ def cmd_waste(args: argparse.Namespace) -> int:
         return EXIT_ERROR
 
     if args.limit:
-        paths = paths[-args.limit:]
+        paths = paths[-args.limit :]
 
     reports = [analyse(p, price) for p in paths]
     summary = summarise(reports)
 
     if args.json:
-        print(json.dumps(
-            {"summary": summary.to_dict(), "reports": [r.to_dict() for r in reports]},
-            indent=2,
-        ))
+        print(
+            json.dumps(
+                {"summary": summary.to_dict(), "reports": [r.to_dict() for r in reports]},
+                indent=2,
+            )
+        )
     else:
         print(f"\namase waste  ·  {len(reports)} transcript(s)  ·  priced as {price.name}\n")
         for r in reports:
@@ -148,18 +154,21 @@ def build_parser() -> argparse.ArgumentParser:
         help="transcript files or directories (default: ~/.claude/projects)",
     )
     waste.add_argument(
-        "-m", "--model",
+        "-m",
+        "--model",
         default=DEFAULT_MODEL,
         help=f"pricing table to use: {', '.join(sorted(TABLE))} (default: {DEFAULT_MODEL})",
     )
     waste.add_argument(
-        "-n", "--limit",
+        "-n",
+        "--limit",
         type=int,
         default=None,
         help="analyse only the most recent N transcripts",
     )
     waste.add_argument(
-        "-t", "--threshold",
+        "-t",
+        "--threshold",
         type=float,
         default=None,
         help="exit 1 if the mean post-signal fraction exceeds this (for CI)",

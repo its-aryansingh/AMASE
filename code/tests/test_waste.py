@@ -33,12 +33,26 @@ def test_fraction_counts_the_signal_turn_and_everything_after(tmp_transcript):
     """
     rows = []
     for i in range(3):
-        rows.append(assistant(i, tool="Read", tool_input={"file_path": f"f{i}.py"},
-                              input_tokens=1_000, output_tokens=0))
+        rows.append(
+            assistant(
+                i,
+                tool="Read",
+                tool_input={"file_path": f"f{i}.py"},
+                input_tokens=1_000,
+                output_tokens=0,
+            )
+        )
         rows.append(tool_result(i))
     for i in range(3, 6):
-        rows.append(assistant(i, tool="Bash", tool_input={"command": "pytest -q"},
-                              input_tokens=1_000, output_tokens=0))
+        rows.append(
+            assistant(
+                i,
+                tool="Bash",
+                tool_input={"command": "pytest -q"},
+                input_tokens=1_000,
+                output_tokens=0,
+            )
+        )
         rows.append(tool_result(i))
     path = tmp_transcript(rows)
 
@@ -93,12 +107,26 @@ def test_summary_mean_and_median(tmp_transcript):
     def looping(name: str, clean: int, loop: int):
         rows = []
         for i in range(clean):
-            rows.append(assistant(i, tool="Read", tool_input={"file_path": f"{name}{i}.py"},
-                                  input_tokens=1_000, output_tokens=0))
+            rows.append(
+                assistant(
+                    i,
+                    tool="Read",
+                    tool_input={"file_path": f"{name}{i}.py"},
+                    input_tokens=1_000,
+                    output_tokens=0,
+                )
+            )
             rows.append(tool_result(i))
         for i in range(clean, clean + loop):
-            rows.append(assistant(i, tool="Bash", tool_input={"command": f"run {name}"},
-                                  input_tokens=1_000, output_tokens=0))
+            rows.append(
+                assistant(
+                    i,
+                    tool="Bash",
+                    tool_input={"command": f"run {name}"},
+                    input_tokens=1_000,
+                    output_tokens=0,
+                )
+            )
             rows.append(tool_result(i))
         return tmp_transcript(rows, name=f"{name}.jsonl")
 
@@ -115,8 +143,15 @@ def test_summary_mean_and_median(tmp_transcript):
 def test_cli_json_output_and_exit_codes(tmp_transcript, capsys):
     rows = []
     for i in range(3):
-        rows.append(assistant(i, tool="Bash", tool_input={"command": "pytest"},
-                              input_tokens=1_000, output_tokens=0))
+        rows.append(
+            assistant(
+                i,
+                tool="Bash",
+                tool_input={"command": "pytest"},
+                input_tokens=1_000,
+                output_tokens=0,
+            )
+        )
         rows.append(tool_result(i))
     path = tmp_transcript(rows)
 

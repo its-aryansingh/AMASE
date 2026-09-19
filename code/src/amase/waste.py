@@ -134,11 +134,7 @@ def summarise(reports: list[Report]) -> Summary:
     mean = sum(fractions) / len(fractions) if fractions else None
     if fractions:
         mid = len(fractions) // 2
-        median = (
-            fractions[mid]
-            if len(fractions) % 2
-            else (fractions[mid - 1] + fractions[mid]) / 2
-        )
+        median = fractions[mid] if len(fractions) % 2 else (fractions[mid - 1] + fractions[mid]) / 2
     else:
         median = None
 
