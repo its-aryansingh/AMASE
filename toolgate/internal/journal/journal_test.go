@@ -95,7 +95,15 @@ func TestDeletionIsDetected(t *testing.T) {
 
 func TestEmptyJournalVerifies(t *testing.T) {
 	p := filepath.Join(t.TempDir(), "j.ndjson")
-	if _, err := Open(p, false); err != nil {
+	j, err := Open(p, false)
+	if err != nil {
+		t.Fatal(err)
+	}
+	// Closing matters here, not just for tidiness. Windows refuses to unlink a
+	// file that is still open, so an unclosed handle makes t.TempDir()'s
+	// cleanup fail and the test fails there and only there. POSIX allows the
+	// unlink, which is why this passed on Linux and macOS for two days.
+	if err := j.Close(); err != nil {
 		t.Fatal(err)
 	}
 	if res := verifyFile(t, p); !res.OK || res.Records != 0 {

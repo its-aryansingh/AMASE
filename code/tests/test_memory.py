@@ -47,6 +47,7 @@ def test_default_path_imports_nothing_third_party() -> None:
         [sys.executable, "-I", "-c", code],
         capture_output=True,
         text=True,
+        check=False,
     )
     assert proc.returncode == 0, proc.stderr
     assert proc.stdout.strip() == "", (

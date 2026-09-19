@@ -123,15 +123,19 @@ def cmd_waste(args: argparse.Namespace) -> int:
             _print_report(r, args.verbose)
         _print_summary(summary, price.name)
 
-    if args.threshold is not None and summary.mean_fraction is not None:
-        if summary.mean_fraction > args.threshold:
-            if not args.json:
-                print(
-                    f"\n  FAIL: mean post-signal fraction {summary.mean_fraction:.3f}"
-                    f" exceeds threshold {args.threshold:.3f}",
-                    file=sys.stderr,
-                )
-            return EXIT_OVER_THRESHOLD
+    over_threshold = (
+        args.threshold is not None
+        and summary.mean_fraction is not None
+        and summary.mean_fraction > args.threshold
+    )
+    if over_threshold:
+        if not args.json:
+            print(
+                f"\n  FAIL: mean post-signal fraction {summary.mean_fraction:.3f}"
+                f" exceeds threshold {args.threshold:.3f}",
+                file=sys.stderr,
+            )
+        return EXIT_OVER_THRESHOLD
 
     return EXIT_OK
 
@@ -187,7 +191,7 @@ def main(argv: list[str] | None = None) -> int:
         return int(args.func(args))
     except KeyboardInterrupt:
         return EXIT_ERROR
-    except Exception as exc:  # noqa: BLE001 - a CLI must not traceback at a user
+    except Exception as exc:
         print(f"amase: {type(exc).__name__}: {exc}", file=sys.stderr)
         return EXIT_ERROR
 

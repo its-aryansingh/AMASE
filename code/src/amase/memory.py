@@ -31,18 +31,19 @@ import os
 import re
 import sqlite3
 import threading
+from collections.abc import Iterable, Iterator, Mapping
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Iterable, Iterator, Mapping, Protocol, runtime_checkable
+from typing import Any, Protocol, runtime_checkable
 
 __all__ = [
-    "MemoryBackend",
-    "SearchHit",
     "LocalBackend",
+    "MemoryBackend",
     "NullBackend",
     "OracleBackend",
-    "open_backend",
+    "SearchHit",
     "default_root",
+    "open_backend",
 ]
 
 
@@ -399,7 +400,7 @@ class LocalBackend:
                 self._conn.close()
                 self._closed = True
 
-    def __enter__(self) -> "LocalBackend":
+    def __enter__(self) -> LocalBackend:
         return self
 
     def __exit__(self, *exc: object) -> None:
@@ -475,7 +476,7 @@ class OracleBackend:
 
     def __init__(self, dsn: str, *, user: str, password: str, table: str = "amase_events") -> None:
         try:
-            import oracledb  # noqa: F401  (optional extra)
+            import oracledb
         except ModuleNotFoundError as exc:  # pragma: no cover - needs the extra
             raise ModuleNotFoundError(
                 "OracleBackend needs the optional extra: pip install 'amase[oracle]'. "

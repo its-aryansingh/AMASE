@@ -15,11 +15,12 @@ text appeared". This module only ever uses it for billing.
 
 from __future__ import annotations
 
-import json
 import hashlib
+import json
+from collections.abc import Iterator
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Iterator, Literal
+from typing import Any, Literal
 
 
 @dataclass(frozen=True)
@@ -42,7 +43,7 @@ class Usage:
         )
 
     @classmethod
-    def parse(cls, raw: Any) -> "Usage":
+    def parse(cls, raw: Any) -> Usage:
         if not isinstance(raw, dict):
             return cls()
 
