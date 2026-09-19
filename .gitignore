@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# Go
+toolgate/toolgate
+toolgate/dist/
+*.exe
+
+# toolgate runtime state
+.toolgate/
+
+# Build artefacts that are rebuilt from source in this repo
+code/amase-v0.1.0-source.tar.gz
+
+# Duplicated exports of files that already live in code/ and product/
+"Claude outputs"/
+Claude outputs/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini

@@ -1,0 +1,6 @@
+# Anchored to this directory on purpose. A bare `toolgate` here would also match
+# the directory cmd/toolgate/, which silently drops main.go from the commit --
+# a gitignore pattern without a slash matches at every depth, not just the root.
+/toolgate
+/dist/
+.toolgate/

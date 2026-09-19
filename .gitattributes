@@ -1,0 +1,11 @@
+# Normalise line endings in the repository regardless of the machine that
+# commits. Without this a Windows checkout stores CRLF, and the CI format check
+# (gofmt -l, ruff format --check) then fails on Linux for reasons that have
+# nothing to do with the code.
+* text=auto eol=lf
+
+*.png  binary
+*.pdf  binary
+*.docx binary
+*.pptx binary
+*.gz   binary
