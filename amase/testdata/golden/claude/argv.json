@@ -1,0 +1,23 @@
+[
+  "-p",
+  "--input-format",
+  "stream-json",
+  "--output-format",
+  "stream-json",
+  "--verbose",
+  "--permission-prompt-tool",
+  "stdio",
+  "--permission-mode",
+  "manual",
+  "--setting-sources",
+  "project,local",
+  "--settings",
+  "<settings.json>",
+  "--session-id",
+  "<session-uuid>",
+  "--include-hook-events",
+  "--max-budget-usd",
+  "1",
+  "--model",
+  "haiku"
+]
