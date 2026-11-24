@@ -68,7 +68,7 @@ jobs:
       - name: Format check
         shell: bash
         run: |
-          unformatted=$(gofmt -l cmd internal)
+          unformatted=$(gofmt -l .)
           if [ -n "$unformatted" ]; then echo "$unformatted"; exit 1; fi
       - name: Vet
         run: go vet ./...
@@ -97,3 +97,51 @@ jobs:
           set -e
           test "$status" -eq 1 || { echo "expected exit 1 (deny), got $status"; exit 1; }
           echo "deny path ok"
+
+  amase-go:
+    name: amase-go (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        working-directory: amase
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with: { go-version: "1.24" }
+      - name: Format check
+        shell: bash
+        run: |
+          unformatted=$(gofmt -l .)
+          if [ -n "$unformatted" ]; then echo "$unformatted"; exit 1; fi
+      - name: Vet
+        run: go vet ./...
+      - name: Tests
+        shell: bash
+        run: |
+          # The race detector needs cgo and a C toolchain, which the Windows
+          # runner does not provide by default; Linux and macOS run it.
+          if [ "$RUNNER_OS" = "Windows" ]; then go test ./...; else go test -race ./...; fi
+      - name: Dependency allowlist
+        shell: bash
+        run: bash scripts/check-deps.sh
+      - name: Build
+        run: go build ./cmd/amase
+
+  amase-latency-gate:
+    name: amase latency gate (ubuntu)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: amase
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with: { go-version: "1.24" }
+      - name: Decision hot path, p99 under 1 ms
+        env:
+          AMASE_LATENCY_GATE: "1"
+        run: go test ./... -run TestLatencyGate -count=1 -v
