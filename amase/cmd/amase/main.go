@@ -35,7 +35,7 @@ func commands() []command {
 		{"serve", "run the workspace daemon and web UI", notYet("serve", "WP-5.1")},
 		{"run", "run one or more agent tasks headless", notYet("run", "WP-3.4")},
 		{"verify", "check the hash chain of a receipt ledger", cmdVerify},
-		{"demo", "create a small demo repository to try amase on", notYet("demo", "WP-1.6")},
+		{"demo", "create a small demo repository to try amase on", cmdDemo},
 		{"waste", "report cost and waste in local agent transcripts", notYet("waste", "WP-4.1")},
 		{"review", "run an independent read-only review of a task's diff", notYet("review", "WP-6.1")},
 		{"bench", "measure the decision hot path", notYet("bench", "WP-7.1")},

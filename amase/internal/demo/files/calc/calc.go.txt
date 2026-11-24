@@ -1,0 +1,11 @@
+// Package calc is a tiny package with one bug, for trying amase.
+package calc
+
+// Sum returns the sum of xs.
+func Sum(xs []int) int {
+	total := 0
+	for i := 1; i < len(xs); i++ {
+		total += xs[i]
+	}
+	return total
+}
