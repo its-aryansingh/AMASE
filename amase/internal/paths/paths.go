@@ -8,6 +8,7 @@ import (
 	"encoding/hex"
 	"fmt"
 	"os"
+	"path"
 	"path/filepath"
 	"runtime"
 	"strings"
@@ -72,10 +73,13 @@ func RepoID(absPath string) string {
 }
 
 func repoID(goos, absPath string) string {
-	p := filepath.ToSlash(filepath.Clean(absPath))
+	// Normalise with slash semantics explicitly rather than the host's
+	// filepath rules, so a Windows path hashes the same whichever OS computes it.
+	p := filepath.ToSlash(absPath)
 	if goos == "windows" {
-		p = strings.ToLower(p)
+		p = strings.ToLower(strings.ReplaceAll(p, `\`, "/"))
 	}
+	p = path.Clean(p)
 	sum := sha256.Sum256([]byte(p))
 	return hex.EncodeToString(sum[:])[:12]
 }
