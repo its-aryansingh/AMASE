@@ -119,7 +119,10 @@ func (m *Manager) List(ctx context.Context, repo string) ([]Worktree, error) {
 	if err != nil {
 		return nil, err
 	}
-	root := filepath.Clean(m.Root)
+	// git reports canonical paths; ours may be spelled differently for the same
+	// directory (macOS /var → /private/var, Windows 8.3 short names), so compare
+	// canonical forms.
+	root := canonical(m.Root)
 	var list []Worktree
 	for _, block := range strings.Split(strings.ReplaceAll(out, "\r\n", "\n"), "\n\n") {
 		var wtPath, branch string
@@ -131,7 +134,7 @@ func (m *Manager) List(ctx context.Context, repo string) ([]Worktree, error) {
 				branch = strings.TrimPrefix(line, "branch refs/heads/")
 			}
 		}
-		if wtPath == "" || !strings.HasPrefix(branch, "amase/") || !within(root, wtPath) {
+		if wtPath == "" || !strings.HasPrefix(branch, "amase/") || !within(root, canonical(wtPath)) {
 			continue
 		}
 		list = append(list, Worktree{Repo: top, Path: wtPath, Branch: branch, TaskID: strings.TrimPrefix(branch, "amase/")})
@@ -143,6 +146,15 @@ func (m *Manager) List(ctx context.Context, repo string) ([]Worktree, error) {
 func (m *Manager) Prune(ctx context.Context, repo string) error {
 	_, err := m.Git.Run(ctx, repo, nil, "worktree", "prune")
 	return err
+}
+
+// canonical resolves symlinks (and, on Windows, 8.3 short names) where the path
+// exists, falling back to the cleaned path.
+func canonical(p string) string {
+	if r, err := filepath.EvalSymlinks(p); err == nil {
+		return r
+	}
+	return filepath.Clean(p)
 }
 
 func within(root, p string) bool {
