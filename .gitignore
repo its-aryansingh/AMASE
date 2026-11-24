@@ -30,3 +30,13 @@ Claude outputs/
 .DS_Store
 Thumbs.db
 desktop.ini
+
+# Local-only multi-agent coordination files (owner rule: never pushed; see COORDINATION.md)
+/COORDINATION.md
+/CLAUDE.md
+/GEMINI.md
+/AGENTS.md
+/plan.md
+/.githooks/
+/.antigravitycli/
+.claude/
