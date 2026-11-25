@@ -125,7 +125,7 @@ func findBash() string {
 func mutate(t *testing.T, dir string) string {
 	t.Helper()
 	if bash := findBash(); bash != "" {
-		cmd := exec.Command(bash, "-c", `rm -rf docs && sed -i 's/x/y/' main.go && echo new > new.txt && mkdir -p sub && echo deep > sub/deep.txt && echo log > debug.log`)
+		cmd := exec.Command(bash, "-c", `rm -rf docs && sed -i.bak 's/x/y/' main.go && rm main.go.bak && echo new > new.txt && mkdir -p sub && echo deep > sub/deep.txt && echo log > debug.log`)
 		cmd.Dir = dir
 		if out, err := cmd.CombinedOutput(); err != nil {
 			t.Fatalf("bash mutation: %v\n%s", err, out)
