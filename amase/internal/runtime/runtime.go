@@ -104,6 +104,13 @@ const (
 	SessionError  EventKind = "SessionError"
 )
 
+// Event.Status values on TurnCompleted.
+const (
+	StatusOK          = "ok"
+	StatusError       = "error"
+	StatusInterrupted = "interrupted"
+)
+
 // Event is something a session reported, normalised across harnesses.
 type Event struct {
 	Kind     EventKind       `json:"kind"`
