@@ -31,12 +31,15 @@ Claude outputs/
 Thumbs.db
 desktop.ini
 
-# Local-only multi-agent coordination files (owner rule: never pushed; see COORDINATION.md)
+# Local-only multi-agent coordination files (owner rule: never pushed; see AGENTS.md)
+/AGENTS.md
 /COORDINATION.md
 /CLAUDE.md
 /GEMINI.md
-/AGENTS.md
 /plan.md
 /.githooks/
 /.antigravitycli/
 .claude/
+
+# Antigravity workspace customizations (local-only, like other coordination files)
+/.agents/
